@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.display_name }}'s Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            {% if user.images %}
+                <img src="{{ user.images[0].url }}" alt="Profile" class="profile-image">
+            {% endif %}
+            <div class="profile-info">
+                <h1>{{ user.display_name }}</h1>
+                <div class="profile-stats">
+                    <p>Spotify ID: {{ user.id }}</p>
+                    <p>Email: {{ user.email }}</p>
+                    <p>Country: {{ user.country }}</p>
+                    <p>Account Type: {{ user.product }}</p>
+                    <p>Followers: {{ user.followers.total }}</p>
+                </div>
+            </div>
+                    <!-- Logout Button -->
+        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        </div>
+
+        <h2>Your Playlists</h2>
+        <div class="playlists-grid">
+            {% for playlist in playlists %}
+            <div class="playlist-card">
+                {% if playlist.images %}
+                    <img src="{{ playlist.images[0].url }}" alt="{{ playlist.name }}">
+                {% endif %}
+                <h3>{{ playlist.name }}</h3>
+                <p>{{ playlist.tracks.total }} tracks</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

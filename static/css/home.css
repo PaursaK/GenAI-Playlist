@@ -1,0 +1,99 @@
+
+.profile-container {
+    background: linear-gradient(135deg, #13111C 0%, #322B45 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem auto;
+    color: white;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-info h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #B794F4;
+}
+
+.profile-stats {
+    color: #A0AEC0;
+    font-size: 1.1rem;
+}
+
+.playlists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.playlist-card {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.playlist-card:hover {
+    transform: translateY(-5px);
+}
+
+.playlist-card img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.playlist-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: white;
+}
+
+.playlist-card p {
+    font-size: 0.9rem;
+    color: #A0AEC0;
+}
+
+.logout-button {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background-color: #B794F4;
+    color: white;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 2rem;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #9F74D4;
+}
+
+.logout-button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(183, 148, 244, 0.8);
+}

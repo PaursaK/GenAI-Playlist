@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect with Spotify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <header class="header">
+        <a href="#" class="logo">Spotify Gen AI</a>
+    </header>
+    
+    <main class="login-container">
+        <h1 class="login-title">Welcome to Spotify Gen AI</h1>
+        <p class="login-description">Connect with your Spotify account to start discovering the perfect playlist with the power of generative AI! O
+            ur app crafts personalized Spotify playlists tailored to your unique vibe, mood, and preferences, all with the help of AI!</p>
+            <button class="spotify-connect" onclick="window.location.href='/login/spotify'">
+            <div class="spotify-logo"></div>
+            Connect with Spotify
+        </button>
+    </main>
+</body>
+</html>
