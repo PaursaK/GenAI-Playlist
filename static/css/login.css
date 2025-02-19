@@ -16,11 +16,13 @@ body {
 
 .header {
     position: absolute;
-    top: 0;
+    top: 10rem;
     padding: 2rem 0;
     width: 100%;
     text-align: center;
 }
+
+
 
 .logo {
     color: #B794F4;
@@ -36,7 +38,7 @@ body {
     padding: 3rem 2rem;
     width: 100%;
     max-width: 400px;
-    margin: 2rem;
+    margin: 2rem auto 0;
     text-align: center;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(8px);
@@ -59,10 +61,10 @@ body {
 .spotify-connect {
     width: 100%;
     padding: 1rem;
-    background: linear-gradient(135deg, #9F7AEA 0%, #B794F4 100%);
+    background: linear-gradient(135deg, #8f6dd2 0%, #B794F4 100%);
     color: white;
     border: none;
-    border-radius: 50px;
+    border-radius: 15px;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;

@@ -1,24 +1,102 @@
+body {
+    background: linear-gradient(to right, #1e1e2f, #3b3054);
+    color: white;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-.profile-container {
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Horizontally centers */
+    justify-content: center; /* Vertically centers */
+    text-align: center; /* Centers text inside the container */
+    font-size: 1.2rem;
+    gap: 1rem; /* Adds space between the heading and the paragraph */
+    max-width: 70%;
+    margin: 0 auto; /* Ensures the container is centered within its parent */
+    width: 100%; /* Makes sure it takes up full width of its container */
+}
+
+.search-container {
+    position: relative;
+    padding:2rem;
     background: linear-gradient(135deg, #13111C 0%, #322B45 100%);
     border-radius: 16px;
     padding: 2rem;
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 2rem auto;
-    color: white;
+    color: rgb(236, 235, 237);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.profile-header {
+.search-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Align the text elements to the start of the container */
     gap: 2rem;
     margin-bottom: 2rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-direction: column;  /* Change flex direction to column for stacking the elements */
+}
+.prompt-container {
+    width: 100%;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;  /* Ensures elements stack vertically */
+    gap: 1rem; /* Spacing between the text area and button */
+}
+
+.prompt-input {
+    width: 95%;
+    min-height: 100px;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.3s ease;
+    margin: 0 auto; /* Centers the element horizontally */
+}
+
+.prompt-input:focus {
+    border-color: #c6c6c7;
+}
+
+.prompt-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.generate-button {
+    align-self: center; /* Ensures the button is on the right */
+    padding: 0.75rem 2rem;
+    background: #9478c5;
+    border: none;
+    border-radius: 12px;
+    color: #e6e5e8;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.generate-button:hover {
+    background: #9f6feb;
+    transform: translateY(-1px);
+}
+
+.generate-button:active {
+    transform: translateY(1px);
 }
 
 .profile-image {
@@ -39,61 +117,192 @@
     font-size: 1.1rem;
 }
 
+/* Center the playlist grid */
 .playlists-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem; /* Space between playlists */
+    flex-wrap: wrap;
     margin-top: 2rem;
 }
 
+/* Playlist card styling */
 .playlist-card {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.3);
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 12px;
+    text-align: center;
+    width: 250px; /* Adjusted width */
     transition: transform 0.2s;
 }
 
 .playlist-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 10px;
 }
 
+/* Playlist image */
 .playlist-card img {
-    width: 100%;
-    aspect-ratio: 1;
+    width: 100px; /* Smaller size */
+    height: 100px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-bottom: 0.5rem;
 }
 
+/* Playlist title */
 .playlist-card h3 {
-    font-size: 1rem;
+    font-size: 1.2rem;
     margin-bottom: 0.25rem;
     color: white;
 }
 
-.playlist-card p {
+/* Track list styling */
+.track-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem; /* Slight margin on top to create some spacing */
+    margin-bottom: 0; /* Remove bottom margin to avoid excess space */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Space between tracks */
+    overflow-y: auto; /* Allow scroll if the list is too long */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem; /* Add padding to separate the line from track list */
+}
+/* Individual track item styling */
+.track-list li {
     font-size: 0.9rem;
+    padding: 0.5rem 1rem; /* Increase padding slightly for more space */
+    background: rgba(0, 0, 0, 0); /* Transparent background by default */
+    border-radius: 8px; /* Slightly round edges for a smoother look */
+    margin-bottom: 0.3rem;
+    color: #A0AEC0; /* Subtle text color */
+    display: flex; /* Flexbox for alignment */
+    flex-direction: column; /* Stack the track name and artist vertically */
+    justify-content: center; /* Center the content vertically */
+    text-align: left; /* Align text to the left */
+    transition: all 0.2s ease; /* Smooth transition for hover effect */
+}
+
+/* On hover, change the background to black with 15% opacity */
+.track-list li:hover {
+    background: rgba(65, 65, 65, 0.15); /* Black background with 15% opacity */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for elevation */
+    /* transform: translateY(-2px); Lift effect */
+}
+
+/* Track name styling */
+.track-name {
+    font-weight: 600; /* Make track name bold */
+    font-size: 1rem; /* Slightly increase font size for track name */
+    margin-bottom: 0.2rem; /* Small space between track name and artist */
+}
+
+/* Artist name styling */
+.track-artist {
+    color: #A0AEC0; /* Keep artist name in the subtle color */
+    font-style: italic; /* Italicize artist name */
+    opacity: 0.7; /* Make artist name a bit lighter */
+    font-size: 0.9rem; /* Slightly smaller font for artist */
+}
+
+
+
+/* Trending Community Searches */
+.trending-searches {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.2rem;
     color: #A0AEC0;
 }
 
+
+/* User Card Styling */
+.user-card {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+.user-icon {
+    cursor: pointer;
+    width: 35px;
+    height:35px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+    background-color: rgba(30, 27, 38, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-icon svg {
+    width: 24px;
+    height: 24px;
+    color: rgb(192, 192, 192);
+}
+
+.user-icon:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background-color: rgba(30, 27, 38, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    width: 180px;
+    padding: 0.75rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    overflow: hidden; /* This will keep child elements from overflowing */
+}
+
+.user-dropdown p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    color: #fff;
+}
+.user-dropdown.show {
+    display: block;
+}
+
 .logout-button {
-    display: inline-block;
-    padding: 0.75rem 2rem;
-    background-color: #B794F4;
-    color: white;
-    font-size: 1.1rem;
-    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 0.4rem;
+    color: #B794F4;
     text-decoration: none;
-    text-align: center;
-    margin-top: 2rem;
-    transition: background-color 0.3s;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-right: auto;
+}
+
+.logout-button svg {
+    width: 16px;
+    height: 16px;
 }
 
 .logout-button:hover {
-    background-color: #9F74D4;
-}
-
-.logout-button:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(183, 148, 244, 0.8);
+    background-color: rgba(183, 148, 244, 0.1);
+    color: #fff;
+    margin-right: 1rem;
+    width: 93%;
 }

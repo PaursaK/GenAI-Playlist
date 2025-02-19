@@ -5,39 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ user.display_name }}'s Profile</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
 </head>
 <body>
-    <div class="profile-container">
-        <div class="profile-header">
-            {% if user.images %}
-                <img src="{{ user.images[0].url }}" alt="Profile" class="profile-image">
-            {% endif %}
-            <div class="profile-info">
-                <h1>{{ user.display_name }}</h1>
-                <div class="profile-stats">
-                    <p>Spotify ID: {{ user.id }}</p>
-                    <p>Email: {{ user.email }}</p>
-                    <p>Country: {{ user.country }}</p>
-                    <p>Account Type: {{ user.product }}</p>
-                    <p>Followers: {{ user.followers.total }}</p>
-                </div>
-            </div>
-                    <!-- Logout Button -->
-        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
-        </div>
 
+    <div class="search-container">
+        <div class="welcome-container">
+            <h1 class="welcome-user">Welcome, {{ user.display_name }}!</h1>
+            <p>Use Generative AI to curate personalized playlists that can be directly added to your Spotify account. You can come up with your own playlist ideas or gain inspiration from popular community keyword searches. Whether you're in the mood for a workout, relaxation, or discovering new genres, the possibilities are endless!</p>
+        </div>
+        <div class="search-header">
+            <div class="prompt-container">
+                <textarea 
+                    class="prompt-input" 
+                    placeholder="Try: 'Create a playlist with songs that sound like Bohemian Rhapsody' or 'Make me a workout playlist with high energy songs'"
+                ></textarea>
+                <button class="generate-button">Generate</button>
+            </div>
+        </div>        
+        <!-- Updated User Card -->
+    <div class="user-card">
+        <div class="user-icon" onclick="toggleUserCard()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+        <div class="user-dropdown" id="userDropdown">
+            <p>{{ user.display_name }}</p>
+            <a href="{{ url_for('logout') }}" class="logout-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Sign out
+            </a>
+        </div>
+    </div>
         <h2>Your Playlists</h2>
         <div class="playlists-grid">
-            {% for playlist in playlists %}
+            {% for playlist in playlists[:3] %}
             <div class="playlist-card">
                 {% if playlist.images %}
-                    <img src="{{ playlist.images[0].url }}" alt="{{ playlist.name }}">
+                    <img src="{{ playlist.images[0].url }}" alt="{{ playlist.name }}" class="playlist-image">
                 {% endif %}
-                <h3>{{ playlist.name }}</h3>
-                <p>{{ playlist.tracks.total }} tracks</p>
+                <h3>{{ playlist.name }}</h3>                
+                <!-- Display the first 2-3 songs from each playlist -->
+                <ul class="track-list">
+                    {% for track in playlist.tracks %}
+                    <li>
+                        <div class="track-name">{{ track.name }}</div>
+                        <div class="track-artist">{{ track.artists[0].name }}</div>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
             {% endfor %}
         </div>
+        <!-- Trending Community Searches Section -->
+        <h2>Trending Community Searches</h2>
+            <div class="trending-searches">
+                <p>No data available yet.</p>
+            </div>        
     </div>
 </body>
 </html>

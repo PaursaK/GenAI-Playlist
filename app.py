@@ -67,7 +67,6 @@ def home():
     if 'spotify_token' not in session:
         return redirect(url_for('login'))
     
-    # Get user profile information from Spotify
     token = session['spotify_token']
     headers = {
         'Authorization': f"Bearer {token['access_token']}"
@@ -81,12 +80,26 @@ def home():
         # Fetch user's playlists
         playlists_response = requests.get('https://api.spotify.com/v1/me/playlists', headers=headers)
         playlists_data = playlists_response.json()
-        
+
+        # Ensure we have playlists
+        if 'items' not in playlists_data:
+            return "Error: Unable to retrieve playlists", 400
+
+        playlists = playlists_data['items'][:3]  # Limit to first 3 playlists
+
+        # Fetch tracks for each playlist
+        for playlist in playlists:
+            tracks_response = requests.get(playlist['tracks']['href'], headers=headers)
+            tracks_data = tracks_response.json()
+            playlist['tracks'] = [track['track'] for track in tracks_data.get('items', [])[:3]]  # First 3 tracks per playlist
+
         return render_template('home.html', 
-                             user=profile_data,
-                             playlists=playlists_data['items'])
+                               user=profile_data,
+                               playlists=playlists)  # Send only first 3 playlists
     except Exception as e:
         return f"Error fetching user data: {str(e)}", 400
+
+
 
 @app.route('/logout')
 def logout():
