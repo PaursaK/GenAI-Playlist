@@ -6,10 +6,14 @@
     <title>{{ user.display_name }}'s Profile</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
     <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
-    <script src="https://sdk.scdn.co/spotify-player.js"></script>  <!-- Import SDK -->
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+        // Make token available to JavaScript
+        const token = "{{ spotify_token }}";
+    </script>
 </head>
 <body>
-
+    <div id="spotify-token" data-token="{{ spotify_token }}" style="display: none;"></div>
     <div class="search-container">
         <div class="welcome-container">
             <h1 class="welcome-user">Welcome, {{ user.display_name }}!</h1>
