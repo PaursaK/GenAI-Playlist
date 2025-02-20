@@ -1,9 +1,10 @@
-from flask import Flask, render_template, redirect, request, url_for, session
+from flask import Flask, render_template, redirect, request, url_for, session, jsonify
 from authlib.integrations.flask_client import OAuth
 import os
 from dotenv import load_dotenv
 import secrets
 import requests
+import json
 load_dotenv()
 
 
@@ -25,7 +26,8 @@ spotify = oauth.register(
     client_secret=os.environ.get('SPOTIFY_CLIENT_SECRET'),
     authorize_url='https://accounts.spotify.com/authorize',
     access_token_url='https://accounts.spotify.com/api/token',
-    client_kwargs={'scope': 'user-library-read playlist-modify-public playlist-modify-private user-read-email user-read-private'},
+    client_kwargs={'scope': 'streaming user-library-read playlist-modify-public playlist-modify-private user-read-email user-read-private user-read-playback-state user-modify-playback-state app-remote-control'
+},
 )
 
 
@@ -38,10 +40,11 @@ def spotify_login():
     # Generate a random state value for security
     session['oauth_state'] = secrets.token_hex(16)
     
-    # Redirect to Spotify's authorization page
+    # Redirect to Spotify's authorization page with updated scope
     return spotify.authorize_redirect(
         redirect_uri=url_for('spotify_callback', _external=True),
-        state=session['oauth_state']
+        state=session['oauth_state'],
+        scope='streaming user-library-read playlist-modify-public playlist-modify-private user-read-email user-read-private user-read-playback-state user-modify-playback-state app-remote-control'
     )
 
 @app.route('/callback/spotify')
@@ -68,6 +71,7 @@ def home():
         return redirect(url_for('login'))
     
     token = session['spotify_token']
+    print(f'Access Token: {token["access_token"]}')  # Debugging line to check the access token
     headers = {
         'Authorization': f"Bearer {token['access_token']}"
     }
@@ -93,12 +97,14 @@ def home():
             tracks_data = tracks_response.json()
             playlist['tracks'] = [track['track'] for track in tracks_data.get('items', [])[:3]]  # First 3 tracks per playlist
 
+        print("Spotify Token:", session.get('spotify_token'))
+
         return render_template('home.html', 
-                               user=profile_data,
-                               playlists=playlists)  # Send only first 3 playlists
+                            user=profile_data,
+                            playlists=playlists,
+                            spotify_token=token['access_token'])  # Check if token is passed correctly
     except Exception as e:
         return f"Error fetching user data: {str(e)}", 400
-
 
 
 @app.route('/logout')

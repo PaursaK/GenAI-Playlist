@@ -193,21 +193,62 @@ body {
     /* transform: translateY(-2px); Lift effect */
 }
 
-/* Track name styling */
+.track-info {
+    display: flex;
+    justify-content: space-between; /* Push elements apart */
+    align-items: center; /* Vertically align */
+    width: 100%;
+}
+
+.track-text {
+    display: flex;
+    flex-direction: column; /* Stack track name & artist */
+}
+
 .track-name {
-    font-weight: 600; /* Make track name bold */
-    font-size: 1rem; /* Slightly increase font size for track name */
-    margin-bottom: 0.2rem; /* Small space between track name and artist */
+    font-size: 1rem;
+    font-weight: bold;
+    font-style: italic;
+    color: white;
 }
 
-/* Artist name styling */
 .track-artist {
-    color: #A0AEC0; /* Keep artist name in the subtle color */
-    font-style: italic; /* Italicize artist name */
-    opacity: 0.7; /* Make artist name a bit lighter */
-    font-size: 0.9rem; /* Slightly smaller font for artist */
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #A0AEC0; /* Slightly faded text */
 }
 
+.play-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease-in-out; /* Smooth animation */
+}
+
+.play-button:hover {
+    transform: scale(1.2); /* Increase size on hover */
+}
+
+.play-button:active {
+    transform: scale(0.95);
+}
+
+.play-icon {
+    width: 16px;
+    height: 16px;
+    fill: white;
+}
+
+.play-button.paused .play-icon {
+    content: "";
+}
+
+.play-button.paused .play-icon path {
+    d: path("M6 5h4v14H6zm8 0h4v14h-4z"); /* Pause icon */
+}
 
 
 /* Trending Community Searches */

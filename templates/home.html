@@ -6,6 +6,7 @@
     <title>{{ user.display_name }}'s Profile</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
     <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>  <!-- Import SDK -->
 </head>
 <body>
 
@@ -55,8 +56,19 @@
                 <ul class="track-list">
                     {% for track in playlist.tracks %}
                     <li>
-                        <div class="track-name">{{ track.name }}</div>
-                        <div class="track-artist">{{ track.artists[0].name }}</div>
+                        <div class="track-info">
+                            <div class="track-text">
+                                <div class="track-name">{{ track.name }}</div>
+                                <div class="track-artist">{{ track.artists[0].name }}</div>
+                            </div>
+                            <button class="play-button" 
+                                    onclick="togglePlayPause(this)" 
+                                    data-track-uri="{{ track.uri }}">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 4l12 8-12 8V4z"></path> <!-- Default play icon -->
+                                </svg>
+                            </button>
+                        </div>
                     </li>
                     {% endfor %}
                 </ul>
