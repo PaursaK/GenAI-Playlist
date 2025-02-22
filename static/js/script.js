@@ -17,6 +17,48 @@ document.addEventListener('click', function(event) {
     }
 });
 
+document.querySelector('.generate-button').addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    const inputText = document.querySelector('.prompt-input').value;
+
+    if (inputText.trim() === "") {
+        console.log("Please enter valid input.");
+        return;
+    }
+
+    document.querySelector('.loading-indicator').style.display = 'block';
+
+    const requestData = {
+        playlist_prompt: inputText
+    };
+
+    fetch('/generate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => {
+        // Hide the loading spinner
+        document.querySelector('.loading-indicator').style.display = 'none';
+    
+        if (response.ok) {
+            console.log('Input sent successfully');
+            
+            // Show the playlist grid
+            document.querySelector('.playlists-grid').classList.remove('hidden');
+        } else {
+            console.error('Error:', response.statusText);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.querySelector('.loading-indicator').style.display = 'none';
+    });
+});
+
 // Global variables for state tracking
 let spotifyPlayer = null;
 let spotifyDeviceId = null;
@@ -51,6 +93,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             },
             body: JSON.stringify({
                 device_ids: [device_id],
+                uris: ["spotify:track:4t9vB7wIKWE5jIhjcztmmd"],  // Use a valid Spotify track URI
                 play: false
             })
         });

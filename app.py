@@ -71,7 +71,7 @@ def home():
         return redirect(url_for('login'))
     
     token = session['spotify_token']
-    print(f'Access Token: {token["access_token"]}')  # Debugging line to check the access token
+    #print(f'Access Token: {token["access_token"]}')  # Debugging line to check the access token
     headers = {
         'Authorization': f"Bearer {token['access_token']}"
     }
@@ -97,7 +97,7 @@ def home():
             tracks_data = tracks_response.json()
             playlist['tracks'] = [track['track'] for track in tracks_data.get('items', [])[:3]]  # First 3 tracks per playlist
 
-        print("Spotify Token:", session.get('spotify_token'))
+        #print("Spotify Token:", session.get('spotify_token'))
 
         return render_template('home.html', 
                             user=profile_data,
@@ -105,6 +105,27 @@ def home():
                             spotify_token=token['access_token'])  # Check if token is passed correctly
     except Exception as e:
         return f"Error fetching user data: {str(e)}", 400
+
+@app.route('/generate', methods=['POST'])
+def generate_playlist():
+    import sys
+    print("Raw request data:", request.get_data(), file=sys.stderr)  # Debugging the raw request body
+    
+    try:
+        data = request.get_json()  # Parse JSON data from the request
+        user_input = data.get('playlist_prompt')
+        print(f"Extracted input: {user_input}", file=sys.stderr)
+        
+        if not user_input or user_input.strip() == "":
+            print("Empty input received", file=sys.stderr)
+            return jsonify({"error": "Empty input received"}), 400
+        
+        return jsonify({"success": True, "message": "Playlist generated!"}), 200
+    except Exception as e:
+        print(f"Error parsing JSON: {e}", file=sys.stderr)
+        return jsonify({"error": "Invalid JSON data"}), 400
+
+
 
 
 @app.route('/logout')

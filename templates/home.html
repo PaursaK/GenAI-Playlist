@@ -20,13 +20,16 @@
             <p>Use Generative AI to curate personalized playlists that can be directly added to your Spotify account. You can come up with your own playlist ideas or gain inspiration from popular community keyword searches. Whether you're in the mood for a workout, relaxation, or discovering new genres, the possibilities are endless!</p>
         </div>
         <div class="search-header">
-            <div class="prompt-container">
-                <textarea 
-                    class="prompt-input" 
-                    placeholder="Try: 'Create a playlist with songs that sound like Bohemian Rhapsody' or 'Make me a workout playlist with high energy songs'"
-                ></textarea>
-                <button class="generate-button">Generate</button>
-            </div>
+            <form action="/generate" method="POST">
+                <div class="prompt-container">
+                    <textarea
+                        class="prompt-input" 
+                        name="playlist_prompt"  
+                        placeholder="Try: 'Create a playlist with songs that sound like Bohemian Rhapsody' or 'Make me a workout playlist with high energy songs'"
+                    ></textarea>
+                    <button class="generate-button">Generate</button>
+                </div>
+            </form>
         </div>        
         <!-- Updated User Card -->
     <div class="user-card">
@@ -48,8 +51,15 @@
             </a>
         </div>
     </div>
-        <h2>Your Playlists</h2>
-        <div class="playlists-grid">
+    <h2>Your Playlists</h2>
+    <div class="playlists-container">
+        <!-- Loading Spinner (Initially Hidden) -->
+        <div class="loading-indicator hidden">
+            <p>Loading...</p>
+        </div>
+    
+        <!-- Playlists Grid (Initially Hidden) -->
+        <div class="playlists-grid hidden">
             {% for playlist in playlists[:3] %}
             <div class="playlist-card">
                 {% if playlist.images %}
@@ -79,6 +89,7 @@
             </div>
             {% endfor %}
         </div>
+    </div>
         <!-- Trending Community Searches Section -->
         <h2>Trending Community Searches</h2>
             <div class="trending-searches">

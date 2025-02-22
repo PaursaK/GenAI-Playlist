@@ -25,10 +25,8 @@ body {
 
 .search-container {
     position: relative;
-    padding:2rem;
     background: linear-gradient(135deg, #13111C 0%, #322B45 100%);
     border-radius: 16px;
-    padding: 2rem;
     width: 100%;
     max-width: 1000px;
     margin: 2rem auto;
@@ -36,28 +34,40 @@ body {
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 2rem;
 }
 
 .search-header {
     display: flex;
-    align-items: flex-start; /* Align the text elements to the start of the container */
+    align-items: center; /* Align the text elements to the start of the container */
     gap: 2rem;
     margin-bottom: 2rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    flex-direction: column;  /* Change flex direction to column for stacking the elements */
-}
-.prompt-container {
-    width: 100%;
-    margin-top: 1.5rem;
-    display: flex;
-    flex-direction: column;  /* Ensures elements stack vertically */
-    gap: 1rem; /* Spacing between the text area and button */
+    flex-direction: column;  /* Stack the elements vertically */
+    width: 100%; /* Ensures the container takes up the full available width */
 }
 
+/* Ensure the form doesn't disrupt the layout */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.prompt-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+
+
 .prompt-input {
-    width: 95%;
-    min-height: 100px;
+    width: 100%;  /* Use full width of the parent container */
+    max-width: 600px; /* Optional: add a max-width for larger screens */
+    min-height: 100px; /* Increase height to make it bigger */
     padding: 1rem;
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -89,6 +99,7 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
+    margin-top: 10px; /* Adds space between the textarea and the button */
 }
 
 .generate-button:hover {
@@ -125,6 +136,10 @@ body {
     gap: 2rem; /* Space between playlists */
     flex-wrap: wrap;
     margin-top: 2rem;
+}
+
+.hidden {
+    display: none;
 }
 
 /* Playlist card styling */
@@ -347,4 +362,10 @@ body {
     color: #fff;
     margin-right: 1rem;
     width: 93%;
+}
+
+@media (max-width: 768px) {
+    .prompt-input {
+        max-width: 100%;
+    }
 }
