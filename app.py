@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import secrets
 import requests
 import json
+import openai
 load_dotenv()
 
 
@@ -12,6 +13,9 @@ load_dotenv()
 
 # Initialize the Flask app
 app = Flask(__name__)
+
+# Set up your OpenAI API key
+openai.api_key = os.environ.get('OPENAI_API_KEY')
 
 # Set the secret key to secure session cookies
 app.secret_key = os.getenv('SECRET_KEY')
@@ -120,10 +124,42 @@ def generate_playlist():
             print("Empty input received", file=sys.stderr)
             return jsonify({"error": "Empty input received"}), 400
         
-        return jsonify({"success": True, "message": "Playlist generated!"}), 200
+        # Call the OpenAI API to get music genres
+        genres = get_music_genres(user_input)
+
+        print(genres)
+        
+        # Return the genres in the response
+        return jsonify({'genres': genres}), 200
+        
     except Exception as e:
         print(f"Error parsing JSON: {e}", file=sys.stderr)
         return jsonify({"error": "Invalid JSON data"}), 400
+    
+# Function to get music genres from OpenAI using GPT-4
+def get_music_genres(user_input):
+    try:
+        # Construct the prompt to send to OpenAI in chat format
+        messages = [
+            {"role": "system", "content": "You are a helpful assistant that provides clear and structured responses."},
+            {"role": "user", "content": f"Given the user's input: '{user_input}', suggest exactly three music genres. Provide only the genres, comma-delimited, with no extra commentary."}
+        ]
+        
+        # Request OpenAI's chat completion model (gpt-4 or gpt-4-turbo)
+        response = openai.ChatCompletion.create(
+            model="gpt-4",  # Or use 'gpt-4-turbo'
+            messages=messages,
+            max_tokens=50,  # Limit to a short response
+            temperature=0.7  # Control randomness (0.0 = deterministic, 1.0 = more creative)
+        )
+        
+        # Extract the genres from the response
+        genres = response['choices'][0]['message']['content'].strip().split(',')
+        return genres
+
+    except Exception as e:
+        print(f"Error calling OpenAI API: {e}")
+        return []
 
 
 
