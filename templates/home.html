@@ -57,8 +57,19 @@
         <div class="loading-indicator hidden">
             <p>Loading...</p>
         </div>
-    
-        <!-- Playlists Grid (Initially Hidden) -->
+        <div class="playlists-grid hidden"></div> <!-- Grid will be populated dynamically -->
+
+    </div>
+        <!-- Trending Community Searches Section -->
+        <h2>Trending Community Searches</h2>
+            <div class="trending-searches">
+                <p>No data available yet.</p>
+            </div>        
+    </div>
+</body>
+</html>
+
+        <!-- Playlists Grid (Initially Hidden) 
         <div class="playlists-grid hidden">
             {% for playlist in playlists[:3] %}
             <div class="playlist-card">
@@ -66,9 +77,9 @@
                     <img src="{{ playlist.images[0].url }}" alt="{{ playlist.name }}" class="playlist-image">
                 {% endif %}
                 <h3>{{ playlist.name }}</h3>                
-                <!-- Display the first 2-3 songs from each playlist -->
+                 Display the first 2-3 songs from each playlist 
                 <ul class="track-list">
-                    {% for track in playlist.tracks %}
+                    {% for track in playlist.tracks[:3] %}
                     <li>
                         <div class="track-info">
                             <div class="track-text">
@@ -79,7 +90,7 @@
                                     onclick="togglePlayPause(this)" 
                                     data-track-uri="{{ track.uri }}">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 4l12 8-12 8V4z"></path> <!-- Default play icon -->
+                                    <path d="M6 4l12 8-12 8V4z"></path> <Default play icon 
                                 </svg>
                             </button>
                         </div>
@@ -88,13 +99,4 @@
                 </ul>
             </div>
             {% endfor %}
-        </div>
-    </div>
-        <!-- Trending Community Searches Section -->
-        <h2>Trending Community Searches</h2>
-            <div class="trending-searches">
-                <p>No data available yet.</p>
-            </div>        
-    </div>
-</body>
-</html>
+        </div> -->

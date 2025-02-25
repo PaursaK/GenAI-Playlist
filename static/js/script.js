@@ -40,24 +40,65 @@ document.querySelector('.generate-button').addEventListener('click', function(ev
         },
         body: JSON.stringify(requestData)
     })
-    .then(response => {
+    .then(response => response.json())  // Get the JSON response from Flask
+    .then(data => {
         // Hide the loading spinner
         document.querySelector('.loading-indicator').style.display = 'none';
-    
-        if (response.ok) {
-            console.log('Input sent successfully');
-            
-            // Show the playlist grid
-            document.querySelector('.playlists-grid').classList.remove('hidden');
-        } else {
-            console.error('Error:', response.statusText);
+
+        if (data.error) {
+            console.error('Error:', data.error);
+            return;
         }
+
+        // Show the playlists grid
+        const playlistsGrid = document.querySelector('.playlists-grid');
+        playlistsGrid.classList.remove('hidden');
+        playlistsGrid.innerHTML = '';  // Clear the current playlists (if any)
+
+        // Render the playlists
+        data.forEach(playlist => {
+            const playlistDiv = document.createElement('div');
+            playlistDiv.classList.add('playlist-card');
+            
+            const playlistHtml = `
+            ${playlist.images && playlist.images.length ? 
+                `<img src="${playlist.images[0].url}" alt="${playlist.name}" class="playlist-image">` : 
+                ''}
+        
+            <h3>${playlist.name}</h3>
+        
+            <ul class="track-list">
+                ${playlist.tracks.items.slice(0, 3).map(track => `
+                    <li>
+                        <div class="track-info">
+                            <div class="track-text">
+                                <div class="track-name">${track.name}</div>
+                                <div class="track-artist">${track.artist}</div>
+                            </div>
+                            <button class="play-button" 
+                                    onclick="togglePlayPause(this)" 
+                                    data-track-uri="${track.uri}">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 4l12 8-12 8V4z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
+                `).join('')}
+            </ul>`
+            
+            ;
+        
+            playlistDiv.innerHTML = playlistHtml;
+            playlistsGrid.appendChild(playlistDiv);
+        });
     })
     .catch(error => {
         console.error('Error:', error);
         document.querySelector('.loading-indicator').style.display = 'none';
     });
 });
+
 
 // Global variables for state tracking
 let spotifyPlayer = null;
