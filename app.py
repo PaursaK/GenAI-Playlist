@@ -150,8 +150,10 @@ def generate_playlist():
                 else:
                     playlist_image = "default_image_url_here"  # Fallback if no image is found
 
+                playlist_name = generate_playlist_name(genre)
+
                 playlist = {
-                    "name": f"Playlist for {genre}",
+                    "name": playlist_name,
                     "description": f"Curated playlist for the {genre} genre.",
                     "external_urls": {"spotify": "https://open.spotify.com"},
                     "images": [{"url": playlist_image}],
@@ -194,7 +196,35 @@ def get_music_genres(user_input):
         print(f"Error calling OpenAI API: {e}")
         return []
 
+# Function to generate a fun playlist name based on a specific genre
+def generate_playlist_name(genre):
+    try:
+        # Construct the prompt to send to OpenAI in chat format
+        messages = [
+            {"role": "system", "content": "You are a creative assistant that generates fun and catchy playlist names."},
+            {"role": "user", "content": f"Generate a fun, urban-style playlist name for the genre: {genre}. Provide only the name, surrounded by quotes, with no extra commentary."}
+        ]
+        
+        # Request OpenAI's chat completion model (gpt-4 or gpt-4-turbo)
+        response = openai.ChatCompletion.create(
+            model="gpt-4",  # Or use 'gpt-4-turbo'
+            messages=messages,
+            max_tokens=50,  # Limit to a short response
+            temperature=0.7  # Control randomness (0.0 = deterministic, 1.0 = more creative)
+        )
+        
+        # Extract the playlist name from the response
+        playlist_name = response['choices'][0]['message']['content'].strip()
+        
+        # Remove quotes if they exist around the name
+        if playlist_name.startswith('"') and playlist_name.endswith('"'):
+            playlist_name = playlist_name[1:-1]
+        
+        return playlist_name
 
+    except Exception as e:
+        print(f"Error calling OpenAI API: {e}")
+        return ""
 
 
 @app.route('/logout')

@@ -27,6 +27,7 @@ document.querySelector('.generate-button').addEventListener('click', function(ev
         return;
     }
 
+    // Show loading indicator while fetching data
     document.querySelector('.loading-indicator').style.display = 'block';
 
     const requestData = {
@@ -42,17 +43,24 @@ document.querySelector('.generate-button').addEventListener('click', function(ev
     })
     .then(response => response.json())  // Get the JSON response from Flask
     .then(data => {
-        // Hide the loading spinner
+        // Hide loading spinner
         document.querySelector('.loading-indicator').style.display = 'none';
 
         if (data.error) {
             console.error('Error:', data.error);
             return;
         }
-
-        // Show the playlists grid
+    
         const playlistsGrid = document.querySelector('.playlists-grid');
-        playlistsGrid.classList.remove('hidden');
+        const placeholder = document.querySelector('.playlists-placeholder');
+    
+        // Hide placeholder when playlists are generated
+        if (data.length > 0) {
+            placeholder.style.display = 'none';
+            playlistsGrid.classList.remove('hidden');
+        }
+        
+        // Clear previous playlists before adding new ones
         playlistsGrid.innerHTML = '';  // Clear the current playlists (if any)
 
         // Render the playlists
@@ -60,36 +68,49 @@ document.querySelector('.generate-button').addEventListener('click', function(ev
             const playlistDiv = document.createElement('div');
             playlistDiv.classList.add('playlist-card');
             
+            // Template for the playlist HTML
             const playlistHtml = `
-            ${playlist.images && playlist.images.length ? 
-                `<img src="${playlist.images[0].url}" alt="${playlist.name}" class="playlist-image">` : 
-                ''}
-        
-            <h3>${playlist.name}</h3>
-        
-            <ul class="track-list">
-                ${playlist.tracks.items.slice(0, 3).map(track => `
-                    <li>
-                        <div class="track-info">
-                            <div class="track-text">
-                                <div class="track-name">${track.name}</div>
-                                <div class="track-artist">${track.artist}</div>
-                            </div>
-                            <button class="play-button" 
-                                    onclick="togglePlayPause(this)" 
-                                    data-track-uri="${track.uri}">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 4l12 8-12 8V4z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </li>
-                `).join('')}
-            </ul>`
+
+                <div class="download-btn-container">
+                    <button class="download-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 17l-5-5h3V3h4v9h3z"></path>
+                        </svg>
+                    </button>
+                    <span class="download-info">Download</span>
+                </div>
+
+                ${playlist.images && playlist.images.length ? 
+                    `<img src="${playlist.images[0].url}" alt="${playlist.name}" class="playlist-image">` 
+                    : ''}
             
-            ;
-        
+                <h3>${playlist.name}</h3>
+            
+                <ul class="track-list">
+                    ${playlist.tracks.items.map(track => `  
+                        <li>
+                            <div class="track-info">
+                                <div class="track-text">
+                                    <div class="track-name">${track.name}</div>
+                                    <div class="track-artist">${track.artist}</div>
+                                </div>
+                                <button class="play-button" 
+                                        onclick="togglePlayPause(this)" 
+                                        data-track-uri="${track.uri}">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6 4l12 8-12 8V4z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+
+            // Inject playlist HTML into the playlist card div
             playlistDiv.innerHTML = playlistHtml;
+
+            // Append the playlist card to the grid
             playlistsGrid.appendChild(playlistDiv);
         });
     })
@@ -98,6 +119,7 @@ document.querySelector('.generate-button').addEventListener('click', function(ev
         document.querySelector('.loading-indicator').style.display = 'none';
     });
 });
+
 
 
 // Global variables for state tracking

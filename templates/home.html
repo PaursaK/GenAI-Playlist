@@ -57,8 +57,12 @@
         <div class="loading-indicator hidden">
             <p>Loading...</p>
         </div>
-        <div class="playlists-grid hidden"></div> <!-- Grid will be populated dynamically -->
+            <!-- Placeholder Message -->
+        <div class="playlists-placeholder">
+            <p>Generated playlists will appear here.</p>
+        </div>
 
+        <div class="playlists-grid hidden"></div> <!-- Grid will be populated dynamically -->
     </div>
         <!-- Trending Community Searches Section -->
         <h2>Trending Community Searches</h2>
@@ -68,35 +72,3 @@
     </div>
 </body>
 </html>
-
-        <!-- Playlists Grid (Initially Hidden) 
-        <div class="playlists-grid hidden">
-            {% for playlist in playlists[:3] %}
-            <div class="playlist-card">
-                {% if playlist.images %}
-                    <img src="{{ playlist.images[0].url }}" alt="{{ playlist.name }}" class="playlist-image">
-                {% endif %}
-                <h3>{{ playlist.name }}</h3>                
-                 Display the first 2-3 songs from each playlist 
-                <ul class="track-list">
-                    {% for track in playlist.tracks[:3] %}
-                    <li>
-                        <div class="track-info">
-                            <div class="track-text">
-                                <div class="track-name">{{ track.name }}</div>
-                                <div class="track-artist">{{ track.artists[0].name }}</div>
-                            </div>
-                            <button class="play-button" 
-                                    onclick="togglePlayPause(this)" 
-                                    data-track-uri="{{ track.uri }}">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 4l12 8-12 8V4z"></path> <Default play icon 
-                                </svg>
-                            </button>
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endfor %}
-        </div> -->
