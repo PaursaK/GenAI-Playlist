@@ -17,6 +17,36 @@ document.addEventListener('click', function(event) {
     }
 });
 
+document.addEventListener('click', function(event) {
+    if (event.target.closest('.download-btn')) { 
+        const playlistCard = event.target.closest('.playlist-card');
+        if (!playlistCard) return;
+
+        // Extract playlist name and track URIs
+        const playlistName = playlistCard.querySelector('h3').textContent;
+        const trackUris = [...playlistCard.querySelectorAll('.play-button')]
+            .map(button => button.getAttribute('data-track-uri'));
+
+        // Send a request to the backend
+        fetch('/download-playlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: playlistName, track_uris: trackUris })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Playlist download started:", data.message);
+            } else {
+                console.error("Error downloading playlist:", data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+});
+
+
+
 document.querySelector('.generate-button').addEventListener('click', function(event) {
     event.preventDefault();
     

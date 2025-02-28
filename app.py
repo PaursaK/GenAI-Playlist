@@ -225,6 +225,62 @@ def generate_playlist_name(genre):
     except Exception as e:
         print(f"Error calling OpenAI API: {e}")
         return ""
+    
+
+@app.route('/download-playlist', methods=['POST'])
+def download_playlist():
+    # Ensure user is authenticated
+    token = session.get('spotify_token')
+    access_token = token['access_token'] if token else None
+    if not access_token:
+        return jsonify({"error": "User not authenticated"}), 401
+
+    data = request.json
+    playlist_name = data.get("name")
+    track_uris = data.get("track_uris")
+
+    if not playlist_name or not track_uris:
+        return jsonify({"error": "Missing playlist name or tracks"}), 400
+
+    # Get user's Spotify ID
+    # Spotify API request
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }
+    user_response = requests.get("https://api.spotify.com/v1/me", headers=headers)
+    
+    if user_response.status_code != 200:
+        return jsonify({"error": "Failed to fetch user profile"}), 400
+
+    user_id = user_response.json()["id"]
+
+    # Create a new playlist
+    create_playlist_url = f"https://api.spotify.com/v1/users/{user_id}/playlists"
+    playlist_data = {
+        "name": playlist_name,
+        "description": "Generated with AI Playlist Creator",
+        "public": False
+    }
+    
+    playlist_response = requests.post(create_playlist_url, json=playlist_data, headers=headers)
+    
+    if playlist_response.status_code != 201:
+        return jsonify({"error": "Failed to create playlist"}), 400
+
+    playlist_id = playlist_response.json()["id"]
+
+    # Add tracks to the playlist
+    add_tracks_url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+    add_tracks_data = {"uris": track_uris}
+    
+    add_tracks_response = requests.post(add_tracks_url, json=add_tracks_data, headers=headers)
+
+    if add_tracks_response.status_code != 201:
+        return jsonify({"error": "Failed to add tracks to playlist"}), 400
+
+    print(f"Playlist '{playlist_name}' created with ID: {playlist_id}")
+    return jsonify({"success": True, "message": f"Playlist '{playlist_name}' created!", "playlist_id": playlist_id})
 
 
 @app.route('/logout')
