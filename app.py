@@ -8,6 +8,8 @@ import json
 import openai
 import random
 import sys
+from database.db_helper import *
+from database.db_init import init_db
 load_dotenv()
 
 
@@ -15,6 +17,9 @@ load_dotenv()
 
 # Initialize the Flask app
 app = Flask(__name__)
+
+#initialize the database
+init_db()
 
 # Set up your OpenAI API key
 openai.api_key = os.environ.get('OPENAI_API_KEY')
@@ -55,6 +60,7 @@ def spotify_login():
 
 @app.route('/callback/spotify')
 def spotify_callback():
+    
     # Verify the state parameter
     if session.get('oauth_state') != request.args.get('state'):
         return 'State verification failed', 400
@@ -66,8 +72,31 @@ def spotify_callback():
         # Store the token in session
         session['spotify_token'] = token
         
+        # Fetch the user profile data from Spotify
+        headers = {
+            'Authorization': f"Bearer {token['access_token']}"
+        }
+        profile_response = requests.get('https://api.spotify.com/v1/me', headers=headers)
+        profile_data = profile_response.json()
+        
+        if 'error' in profile_data:
+            return f"Error fetching user data: {profile_data['error']['message']}", 400
+        
+        spotify_user_id = profile_data['id']
+        user_name = profile_data['display_name']
+        
+        # Check if user already exists in the database
+        user = fetch_user(spotify_user_id)
+        if not user:
+            # If the user doesn't exist, create a new user
+            add_user(spotify_user_id, token['access_token'], token['refresh_token'], user_name)
+
+        print_all_users()
+        print_all_token_frequencies()
+        
         # Redirect to home page after successful authentication
         return redirect(url_for('home'))
+    
     except Exception as e:
         return f'Error during authentication: {str(e)}', 400
 
@@ -107,9 +136,22 @@ def generate_playlist():
             return jsonify({"error": "Empty input received"}), 400
         
         genres = get_music_genres(user_input)
+        significant_tokens = get_tokens_from_input(user_input)
         
         if not genres:
             return jsonify({"error": "No genres found from input."}), 400
+        
+        if significant_tokens and genres:
+            # Update the token frequency table with the genres
+            try:
+                update_token_frequency_with_genres(significant_tokens, genres)
+            except Exception as e:
+                print(f"Error updating token frequency with genres: {e}")
+                return jsonify({"error": "Failed to update token frequency with genres."}), 500
+
+        print_all_users()
+        print_all_token_frequencies()
+        print(fetch_trending_tokens())
         
         playlists = []
         for genre in genres:
@@ -195,6 +237,32 @@ def get_music_genres(user_input):
     except Exception as e:
         print(f"Error calling OpenAI API: {e}")
         return []
+    
+def get_tokens_from_input(user_input):
+    try:
+        # Construct the prompt to send to OpenAI in chat format
+        messages = [
+            {"role": "system", "content": "You are a helpful assistant that extracts relevant tokens or keywords from user input."},
+            {"role": "user", "content": f"Given the user's input: '{user_input}', extract relevant tokens or keywords used to determine the music genre. Provide only the tokens, comma-delimited, with no extra commentary."}
+        ]
+        
+        # Request OpenAI's chat completion model (gpt-4 or gpt-4-turbo)
+        response = openai.ChatCompletion.create(
+            model="gpt-4",  # Or use 'gpt-4-turbo'
+            messages=messages,
+            max_tokens=50,  # Limit to a short response for just tokens
+            temperature=0.7  # Control randomness (0.0 = deterministic, 1.0 = more creative)
+        )
+        
+        # Extract tokens from the response
+        tokens = response['choices'][0]['message']['content'].strip()
+        
+        # Return the tokens as a list (comma-delimited format)
+        return tokens.split(", ")
+
+    except Exception as e:
+        print(f"Error calling OpenAI API: {e}")
+        return []  # Return empty list in case of an error
 
 # Function to generate a fun playlist name based on a specific genre
 def generate_playlist_name(genre):
@@ -288,9 +356,16 @@ def logout():
     # Clear the session data
     session.pop('spotify_token', None)
     session.pop('oauth_state', None)
-    
+
+    # Optionally, you can also clear other session data if needed
+    session.clear()
+
+    #remove tables from database
+    drop_tables()
+
     # Redirect to the login page after logout
     return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

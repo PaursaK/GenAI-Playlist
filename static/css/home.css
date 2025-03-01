@@ -23,6 +23,8 @@ body {
     width: 100%; /* Makes sure it takes up full width of its container */
 }
 
+
+
 .search-container {
     position: relative;
     background: linear-gradient(135deg, #13111C 0%, #322B45 100%);
