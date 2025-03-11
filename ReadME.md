@@ -7,7 +7,9 @@ The Gen AI Spotify Playlist Generator is a full-stack web application that allow
 ## Preview
 
 Click on the thumbnail to check the demo!
-[![Watch Video](https://drive.google.com/thumbnail?id=1jSpdPIVtSHjyqMd2dq-SfnHDlwFmJK6M)](https://drive.google.com/file/d/1jSpdPIVtSHjyqMd2dq-SfnHDlwFmJK6M/view)
+
+[<img src="https://drive.google.com/thumbnail?id=1jSpdPIVtSHjyqMd2dq-SfnHDlwFmJK6M" width="500" height="auto">](https://drive.google.com/file/d/1jSpdPIVtSHjyqMd2dq-SfnHDlwFmJK6M/view)
+
 
 ## Features
 
