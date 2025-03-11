@@ -6,15 +6,15 @@ The Gen AI Spotify Playlist Generator is a full-stack web application that allow
 
 ## Features
 
-- AI-Generated Playlists: Enter a text prompt to generate a curated playlist.
+- **AI-Generated Playlists**: Enter a text prompt to generate a curated playlist.
 
-- Spotify Integration: Securely log in with Spotify to create and save playlists.
+- **Spotify Integration**: Securely log in with Spotify to create and save playlists.
 
-- Genre Analysis: Uses AI to understand user input and map it to relevant music genres.
+- **Genre Analysis**: Uses AI to understand user input and map it to relevant music genres.
 
-- Community Trends: Tracks trending searches to display popular music preferences.
+- **Community Trends**: Tracks trending searches to display popular music preferences.
 
-- Interactive Word Cloud: Displays trending genres in a visually engaging way.
+- **Interactive Word Cloud**: Displays trending genres in a visually engaging way.
 
 ## Tech Stack
 
