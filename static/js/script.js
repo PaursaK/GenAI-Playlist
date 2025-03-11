@@ -314,3 +314,120 @@ async function pausePlayback() {
         console.error('Error pausing playback:', error);
     }
 }
+
+// Function to fetch the genre data from the server
+async function fetchGenreData() {
+    try {
+      const response = await fetch('/get-trending-genres');
+      const data = await response.json();
+
+      if (data.error) {
+        console.error('Error fetching genre data:', data.error);
+        return;
+      }
+
+      // Call the function to generate the word cloud
+      generateWordCloud(data);
+    } catch (error) {
+      console.error('Error fetching genre data:', error);
+    }
+  }
+
+  function generateWordCloud(genreData) {
+    const wordCloudContainer = document.getElementById('wordCloud');
+    const noDataMessage = document.getElementById('noDataMessage');
+    const maxWordCount = Math.max(...Object.values(genreData));
+    
+    const usedPositions = [];  // Array to track positions of the words to avoid overlap
+
+    // Hide the "No data" message
+    noDataMessage.style.display = 'none';
+
+    const words = Object.entries(genreData).map(([word, count]) => {
+        const wordElement = document.createElement('span');
+        wordElement.textContent = word;
+
+        // Dynamically set font size based on the word count
+        const fontSize = Math.min(50, (count / maxWordCount) * 100);  // Scale font size
+        wordElement.style.fontSize = `${fontSize}px`;
+
+        // Generate a random neon color for each word
+        const neonColor = generateRandomNeonColor();
+        wordElement.style.color = neonColor;
+
+        // Add a CSS class to the word element
+        wordElement.classList.add('word');
+
+        // Create the word object with details
+        return {
+            element: wordElement,
+            word: word,
+            fontSize: fontSize,
+            width: wordElement.offsetWidth,
+            height: wordElement.offsetHeight
+        };
+    });
+
+    // Apply force-directed positioning algorithm
+    const maxIterations = 1000;
+    let iterations = 0;
+    let stable = false;
+
+    while (!stable && iterations < maxIterations) {
+        stable = true;
+        iterations++;
+
+        words.forEach((word, i) => {
+            let newX = Math.random() * (wordCloudContainer.clientWidth - word.width);
+            let newY = Math.random() * (wordCloudContainer.clientHeight - word.height);
+
+            // Apply repulsive force to avoid overlap
+            words.forEach((otherWord, j) => {
+                if (i !== j) {
+                    const dist = getDistance(word, otherWord);
+                    const minDist = (word.fontSize / 2) + (otherWord.fontSize / 2);
+
+                    if (dist < minDist) {
+                        stable = false;
+                        // Apply repulsive force
+                        newX = word.element.offsetLeft + Math.random() * 10 - 5;
+                        newY = word.element.offsetTop + Math.random() * 10 - 5;
+                    }
+                }
+            });
+
+            // Check if new position is within container bounds
+            if (newX + word.width > wordCloudContainer.clientWidth) newX = wordCloudContainer.clientWidth - word.width;
+            if (newY + word.height > wordCloudContainer.clientHeight) newY = wordCloudContainer.clientHeight - word.height;
+
+            word.element.style.left = `${newX}px`;
+            word.element.style.top = `${newY}px`;
+
+            usedPositions.push({ x: newX, y: newY, size: word.fontSize });
+        });
+    }
+
+    // Append all words to the container
+    words.forEach(word => {
+        wordCloudContainer.appendChild(word.element);
+    });
+
+}
+
+// Function to generate a random neon color
+function generateRandomNeonColor() {
+    const r = Math.floor(128 + Math.random() * 128); // Random red (128-255)
+    const g = Math.floor(128 + Math.random() * 128); // Random green (128-255)
+    const b = Math.floor(128 + Math.random() * 128); // Random blue (128-255)
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
+// Function to get the distance between two words
+function getDistance(word1, word2) {
+    const dx = word1.element.offsetLeft - word2.element.offsetLeft;
+    const dy = word1.element.offsetTop - word2.element.offsetTop;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+fetchGenreData();
+

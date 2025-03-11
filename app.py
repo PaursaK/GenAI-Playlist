@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, session, jsonify
+from flask import Flask, render_template, redirect, request, url_for, session, jsonify, send_file
 from authlib.integrations.flask_client import OAuth
 import os
 from dotenv import load_dotenv
@@ -10,6 +10,7 @@ import random
 import sys
 from database.db_helper import *
 from database.db_init import init_db
+from collections import Counter
 load_dotenv()
 
 
@@ -48,6 +49,7 @@ def login():
 
 @app.route('/login/spotify')
 def spotify_login():
+
     # Generate a random state value for security
     session['oauth_state'] = secrets.token_hex(16)
     
@@ -349,6 +351,32 @@ def download_playlist():
 
     print(f"Playlist '{playlist_name}' created with ID: {playlist_id}")
     return jsonify({"success": True, "message": f"Playlist '{playlist_name}' created!", "playlist_id": playlist_id})
+
+def fetch_genres_for_wordcloud():
+    """Fetch all genres from the database and count their occurrences."""
+    conn = sqlite3.connect("spotify_gen_ai.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT genres FROM token_frequency")
+    rows = cursor.fetchall()
+    conn.close()
+
+    all_genres = []
+    for row in rows:
+        if row[0]:
+            all_genres.extend(row[0].split(","))  # Split genres and add to list
+
+    genre_counts = dict(Counter(all_genres))  # Count occurrences
+    return genre_counts
+
+@app.route("/get-trending-genres")
+def get_genres():
+    """Return genres and frequencies as JSON."""
+    genre_data = fetch_genres_for_wordcloud()
+
+    if not genre_data:
+        return jsonify({"error": "No genre data found."}), 404
+    
+    return jsonify(genre_data)
 
 
 @app.route('/logout')

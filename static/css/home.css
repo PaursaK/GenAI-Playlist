@@ -373,6 +373,22 @@ form {
     color: #A0AEC0;
 }
 
+#wordCloud {
+    position: relative;  /* This makes #wordCloud the reference point for absolute positioning */
+}
+
+#wordCloud .word {
+    position: relative;
+    display: inline-block; /* Ensure words don't overlap when scaling */
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+#wordCloud .word:hover {
+    transform: scale(1.2);
+    z-index: 5; /* Ensures the word is above others when hovered */
+}
+
+
 
 /* User Card Styling */
 .user-card {
