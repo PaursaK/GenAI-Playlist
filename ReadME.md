@@ -4,6 +4,11 @@
 
 The Gen AI Spotify Playlist Generator is a full-stack web application that allows users to generate custom Spotify playlists based on text prompts. Utilizing OpenAI's API for intelligent playlist curation and the Spotify API for music streaming and playlist management, this app provides a seamless experience for music discovery.
 
+## Preview
+
+Click on the thumbnail to check the demo!
+[![Watch Video](https://drive.google.com/thumbnail?id=1jSpdPIVtSHjyqMd2dq-SfnHDlwFmJK6M)](https://drive.google.com/file/d/1jSpdPIVtSHjyqMd2dq-SfnHDlwFmJK6M/view)
+
 ## Features
 
 - **AI-Generated Playlists**: Enter a text prompt to generate a curated playlist.
