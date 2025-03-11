@@ -49,23 +49,23 @@ The Gen AI Spotify Playlist Generator is a full-stack web application that allow
 1. Clone the repository:
    ```sh
    git clone https://github.com/yourusername/gen-ai-spotify.git
-   cd gen-ai-spotify```
+   cd gen-ai-spotify
 
 2. Create a virtual environment and install dependencies
-```sh
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-pip install -r requirements.txt```
+   ```sh
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   pip install -r requirements.txt
 
 3. Set up environment variables:
-```sh
-export SPOTIFY_CLIENT_ID='your_spotify_client_id'
-export SPOTIFY_CLIENT_SECRET='your_spotify_client_secret'
-export OPENAI_API_KEY='your_openai_api_key'```
+   ```sh
+   export SPOTIFY_CLIENT_ID='your_spotify_client_id'
+   export SPOTIFY_CLIENT_SECRET='your_spotify_client_secret'
+   export OPENAI_API_KEY='your_openai_api_key'
 
 4. Run the backend server:
-```sh
-flask run```
+   ```sh
+   flask run
 
 ## Usage
 
