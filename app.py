@@ -221,9 +221,9 @@ def get_music_genres(user_input):
             {"role": "user", "content": f"Given the user's input: '{user_input}', suggest exactly three music genres. Provide only the genres, comma-delimited, with no extra commentary."}
         ]
         
-        # Request OpenAI's chat completion model (gpt-4 or gpt-4-turbo)
+        # Request OpenAI's chat completion model (gpt-4 )
         response = openai.ChatCompletion.create(
-            model="gpt-4",  # Or use 'gpt-4-turbo'
+            model="gpt-4", 
             messages=messages,
             max_tokens=50,  # Limit to a short response
             temperature=0.7  # Control randomness (0.0 = deterministic, 1.0 = more creative)
@@ -245,9 +245,9 @@ def get_tokens_from_input(user_input):
             {"role": "user", "content": f"Given the user's input: '{user_input}', extract relevant tokens or keywords used to determine the music genre. Provide only the tokens, comma-delimited, with no extra commentary."}
         ]
         
-        # Request OpenAI's chat completion model (gpt-4 or gpt-4-turbo)
+        # Request OpenAI's chat completion model (gpt-4)
         response = openai.ChatCompletion.create(
-            model="gpt-4",  # Or use 'gpt-4-turbo'
+            model="gpt-4", 
             messages=messages,
             max_tokens=50,  # Limit to a short response for just tokens
             temperature=0.7  # Control randomness (0.0 = deterministic, 1.0 = more creative)
@@ -272,9 +272,9 @@ def generate_playlist_name(genre):
             {"role": "user", "content": f"Generate a fun, urban-style playlist name for the genre: {genre}. Provide only the name, surrounded by quotes, with no extra commentary."}
         ]
         
-        # Request OpenAI's chat completion model (gpt-4 or gpt-4-turbo)
+        # Request OpenAI's chat completion model (gpt-4 )
         response = openai.ChatCompletion.create(
-            model="gpt-4",  # Or use 'gpt-4-turbo'
+            model="gpt-4", 
             messages=messages,
             max_tokens=50,  # Limit to a short response
             temperature=0.7  # Control randomness (0.0 = deterministic, 1.0 = more creative)
@@ -381,9 +381,6 @@ def logout():
     # Clear the session data
     session.pop('spotify_token', None)
     session.pop('oauth_state', None)
-
-    # Optionally, you can also clear other session data if needed
-    session.clear()
 
     # Redirect to the login page after logout
     return redirect(url_for('login'))

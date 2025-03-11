@@ -1,0 +1,6 @@
+Flask
+Authlib
+python-dotenv
+requests
+openai
+sqlite3  # (Included in Python stdlib, but sometimes listed)
