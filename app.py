@@ -4,10 +4,7 @@ import os
 from dotenv import load_dotenv
 import secrets
 import requests
-import json
 import openai
-import random
-import sys
 from database.db_helper import *
 from database.db_init import init_db
 from collections import Counter
@@ -387,9 +384,6 @@ def logout():
 
     # Optionally, you can also clear other session data if needed
     session.clear()
-
-    #remove tables from database
-    drop_tables()
 
     # Redirect to the login page after logout
     return redirect(url_for('login'))

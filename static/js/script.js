@@ -17,6 +17,7 @@ document.addEventListener('click', function(event) {
     }
 });
 
+//download playlist button
 document.addEventListener('click', function(event) {
     if (event.target.closest('.download-btn')) { 
         const playlistCard = event.target.closest('.playlist-card');
@@ -216,7 +217,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     player.connect();
 };
 
-// FIXED: Function to update all button states based on player state
+// Function to update all button states based on player state
 function updatePlayerButtonStates(isPaused) {
     document.querySelectorAll('.play-button').forEach(button => {
         const buttonUri = button.getAttribute('data-track-uri');
@@ -232,7 +233,7 @@ function updatePlayerButtonStates(isPaused) {
     });
 }
 
-// FIXED: Function to reset all play buttons except the active one
+// Function to reset all play buttons except the active one
 function resetAllPlayerButtons(activeUri) {
     document.querySelectorAll('.play-button').forEach(button => {
         const buttonUri = button.getAttribute('data-track-uri');
@@ -270,6 +271,7 @@ function togglePlayPause(button) {
 // Play a specific song
 async function playSong(uri) {
     console.log("Playing track:", uri);
+
     
     try {
         // FIXED: Using the correct function name

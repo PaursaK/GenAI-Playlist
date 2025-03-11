@@ -68,7 +68,7 @@ form {
 
 .prompt-input {
     width: 100%;  /* Use full width of the parent container */
-    max-width: 600px; /* Optional: add a max-width for larger screens */
+    max-width: 600px; /* add a max-width for larger screens */
     min-height: 100px; /* Increase height to make it bigger */
     padding: 1rem;
     background: rgba(0, 0, 0, 0.2);
